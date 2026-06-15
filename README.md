@@ -4,6 +4,19 @@ A typed Dart client for the [Claris FileMaker Data API](https://help.claris.com/
 
 > Not affiliated with or endorsed by Claris International Inc. "FileMaker" and "Claris" are trademarks of Claris International Inc.
 
+## Companion package
+
+This is one of a pair. Its companion is [`filemaker_odata_api`](https://pub.dev/packages/filemaker_odata_api), a client for FileMaker's OData v4 interface. They are different APIs, not two flavours of one:
+
+| | Data API (`this package`) | OData |
+| --- | --- | --- |
+| Auth | Session token | HTTP Basic, every request |
+| Addresses | **Layouts** | Base **tables** |
+| Query | Find requests / found sets | OData v4 (`$filter`, `$select`, ...) |
+| Standard | FileMaker-specific | OData 4.01 |
+
+Pick the Data API for layout-scoped access, portals, and script results; pick OData for standards-based tooling and ad-hoc querying.
+
 ## Features
 
 - Session token managed for you: logs in on first use, refreshes once automatically if the token expires.

@@ -1,3 +1,8 @@
+## 0.1.1
+
+- Add `topics` to pubspec for discoverability.
+- README: cross-reference the companion `filemaker_odata_api` package.
+
 ## 0.1.0
 
 - Initial release.
