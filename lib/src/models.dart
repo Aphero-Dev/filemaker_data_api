@@ -24,8 +24,7 @@ class SortOrder {
   /// Serializes to the shape the Data API expects in a `sort` array.
   Map<String, String> toJson() => {
         'fieldName': fieldName,
-        'sortOrder':
-            direction == SortDirection.ascend ? 'ascend' : 'descend',
+        'sortOrder': direction == SortDirection.ascend ? 'ascend' : 'descend',
       };
 }
 

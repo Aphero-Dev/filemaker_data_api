@@ -5,13 +5,15 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
-http.Response _json(Object body, [int status = 200]) =>
-    http.Response(jsonEncode(body), status,
-        headers: {'content-type': 'application/json'});
+http.Response _json(Object body, [int status = 200]) => http.Response(
+      jsonEncode(body),
+      status,
+      headers: {'content-type': 'application/json'},
+    );
 
 const _ok = {
   'messages': [
-    {'code': '0', 'message': 'OK'}
+    {'code': '0', 'message': 'OK'},
   ],
 };
 
@@ -41,12 +43,14 @@ void main() {
     });
 
     test('throws FileMakerAuthException on bad credentials', () async {
-      final mock = MockClient((req) async => _json({
-            'messages': [
-              {'code': '212', 'message': 'Invalid account or password'}
-            ],
-            'response': {},
-          }));
+      final mock = MockClient(
+        (req) async => _json({
+          'messages': [
+            {'code': '212', 'message': 'Invalid account or password'},
+          ],
+          'response': {},
+        }),
+      );
 
       final fm = FileMakerClient(
         host: 'https://fms.example.com',
@@ -143,7 +147,7 @@ void main() {
       final result = await fm.find(
         layout: 'Contacts',
         query: [
-          {'state': 'NSW'}
+          {'state': 'NSW'},
         ],
       );
       expect(result.foundCount, 2);
@@ -162,7 +166,7 @@ void main() {
         }
         return _json({
           'messages': [
-            {'code': '401', 'message': 'No records match the request'}
+            {'code': '401', 'message': 'No records match the request'},
           ],
           'response': {},
         });
@@ -179,7 +183,7 @@ void main() {
       final result = await fm.find(
         layout: 'Contacts',
         query: [
-          {'name': 'Nobody'}
+          {'name': 'Nobody'},
         ],
       );
       expect(result.isEmpty, isTrue);
@@ -204,7 +208,7 @@ void main() {
           getsBeforeRefresh++;
           return _json({
             'messages': [
-              {'code': '952', 'message': 'Invalid FileMaker Data API token'}
+              {'code': '952', 'message': 'Invalid FileMaker Data API token'},
             ],
             'response': {},
           });

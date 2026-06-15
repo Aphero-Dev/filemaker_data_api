@@ -372,8 +372,10 @@ class FileMakerClient {
     final info = (response['dataInfo'] as Map?) ?? const {};
     return FoundSet(
       records: data
-          .map((e) =>
-              FileMakerRecord.fromJson(Map<String, dynamic>.from(e as Map)))
+          .map(
+            (e) =>
+                FileMakerRecord.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
           .toList(),
       totalRecordCount: int.tryParse('${info['totalRecordCount']}') ?? 0,
       foundCount: int.tryParse('${info['foundCount']}') ?? 0,
