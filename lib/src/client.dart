@@ -230,6 +230,10 @@ class FileMakerClient {
   /// multiple maps are OR-ed together. Add `'omit': 'true'` to a request to
   /// omit matches. Example: `[{'state': 'NSW'}, {'state': 'VIC', 'omit': 'true'}]`.
   ///
+  /// To retrieve all records unconditionally, use [getRecords] instead. The
+  /// Data API rejects a find with empty criteria, so this method throws an
+  /// [ArgumentError] if [query] is empty or contains only empty requests.
+  ///
   /// Returns an empty [FoundSet] when nothing matches rather than throwing,
   /// so callers can branch on [FoundSet.isEmpty].
   Future<FoundSet> find({
@@ -239,6 +243,18 @@ class FileMakerClient {
     int offset = 1,
     int limit = 100,
   }) async {
+    final hasCriteria = query.any(
+      (request) => request.keys
+          .any((key) => key != 'omit' && '${request[key]}'.isNotEmpty),
+    );
+    if (!hasCriteria) {
+      throw ArgumentError.value(
+        query,
+        'query',
+        'Find requires at least one non-empty criterion. To retrieve all '
+            'records, use getRecords() instead.',
+      );
+    }
     final payload = <String, dynamic>{
       'query': query,
       'offset': '$offset',
@@ -303,6 +319,12 @@ class FileMakerClient {
   }
 
   /// Returns the names of all layouts in the database.
+  ///
+  /// Only layouts accessible to the authenticated account's privilege set are
+  /// returned, and layouts hidden from the layout menu may be omitted. This is
+  /// not necessarily every layout in the file; a layout absent from this list
+  /// can still be used by name in other calls if the account has access to its
+  /// underlying table.
   Future<List<String>> layouts() async {
     final body = await _authed(
       (token) => _http.get(

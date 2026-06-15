@@ -102,6 +102,25 @@ void main() {
   });
 
   group('find', () {
+    test('throws ArgumentError on empty query', () async {
+      final fm = FileMakerClient(
+        host: 'https://fms.example.com',
+        database: 'Contacts',
+        username: 'admin',
+        password: 'secret',
+        httpClient: MockClient((req) async => _json(_ok)),
+      );
+
+      expect(
+        () => fm.find(layout: 'Contacts', query: const [{}]),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => fm.find(layout: 'Contacts', query: const []),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
     test('parses a found set', () async {
       final mock = MockClient((req) async {
         if (req.url.path.endsWith('/sessions')) {
